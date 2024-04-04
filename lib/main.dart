@@ -1,44 +1,36 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:e_commerce_app_c10_sun/core/config/application_theme_manager.dart';
 import 'package:e_commerce_app_c10_sun/core/config/page_routes_name.dart';
 import 'package:e_commerce_app_c10_sun/core/config/routes.dart';
+import 'package:e_commerce_app_c10_sun/core/services/loading_service.dart';
+import 'package:e_commerce_app_c10_sun/core/services/web_serivces.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   runApp(const MyApp());
+  configLoading();
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      title: 'E_commerce App',
+      theme: ApplicationThemeManger.themeData,
       debugShowCheckedModeBanner: false,
       initialRoute: PageRoutesNames.initial,
       onGenerateRoute: Routes.onGenerate,
       navigatorKey: navigatorKey,
+      builder: EasyLoading.init(
+        builder: BotToastInit(),
+      ),
     );
   }
 }
