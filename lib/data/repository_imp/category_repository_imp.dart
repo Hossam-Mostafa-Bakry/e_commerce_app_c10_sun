@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app_c10_sun/core/failure/failures.dart';
-import '../../core/failure/failure.dart';
 import '../../data/data_source/category_data_source/category_data_source.dart';
 import '../../data/model/category_data_model.dart';
 import '../../domain/entities/category_data.dart';
@@ -17,8 +16,11 @@ class CategoryRepositoryImp implements CategoryRepository {
     try {
       final response = await dataSource.getCategoryDataList();
       if (response.statusCode == 200) {
+
         List<CategoryDataModel> categoryDataList = [];
+
         var responseDataList = response.data["data"] as List;
+
         for (var element in responseDataList) {
           categoryDataList.add(CategoryDataModel.fromJSON(element));
         }

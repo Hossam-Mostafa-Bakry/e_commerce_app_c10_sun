@@ -8,10 +8,11 @@ class CategoryDataModel extends CategoryData {
     required super.imageURL,
   });
 
+
   factory CategoryDataModel.fromJSON(Map<String, dynamic> json) =>
       CategoryDataModel(
         id: json["_id"],
-        title: json["title"],
+        title: json["name"],
         slug: json["slug"],
         imageURL: json["image"],
       );

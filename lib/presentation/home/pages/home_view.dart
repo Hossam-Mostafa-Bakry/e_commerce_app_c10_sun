@@ -1,26 +1,37 @@
 import 'package:e_commerce_app_c10_sun/core/extenions/padding_ext.dart';
+import 'package:e_commerce_app_c10_sun/presentation/home/viewModel/cubit.dart';
+import 'package:e_commerce_app_c10_sun/presentation/home/viewModel/states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../widgets/carousel_slider_offer.dart';
 import '../widgets/category_widget.dart';
 import '../widgets/home_appliance.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   static const String routeName = "home";
 
-  HomeView({
-    super.key,
-  });
+  const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  var vm = CategoryViewModel();
+
+  @override
+  void initState() {
+    vm.getCategoryList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var mediaQuery = MediaQuery.of(context).size;
-    List<CategoryData> categoryDataList = [];
-    for (int i = 0; i <= 7; i++) {
-      categoryDataList.add(CategoryData(
-          title: 'Women’s fashion', imagePath: 'assets/images/test.jpg'));
-    }
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -80,39 +91,84 @@ class HomeView extends StatelessWidget {
                     style: theme.textTheme.titleMedium,
                   ),
                   const Spacer(),
-                  Text('view all', style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.primaryColor,
-                    fontSize: 12
-                  )),
+                  Text('view all',
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(color: theme.primaryColor, fontSize: 12)),
                 ],
               ).setVerticalPadding(context, 0.025),
-              SizedBox(
-                height: 250,
-                width: mediaQuery.width,
-                child: GridView.builder(
-                  scrollDirection: Axis.horizontal,
+              BlocBuilder<CategoryViewModel, CategoryStates>(
+                bloc: vm,
+                builder: (BuildContext context, state) {
+                  switch (state) {
+                    case LoadingCategoryState():
+                      {
+                        return SizedBox(
+                          height: 250,
+                          width: mediaQuery.width,
+                          child: GridView.builder(
+                            scrollDirection: Axis.horizontal,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 20,
+                                    childAspectRatio: 1.1),
+                            itemBuilder: (context, index) {
+                              return SizedBox(
+                                width: 200.0,
+                                height: 100.0,
+                                child: Shimmer.fromColors(
+                                  direction: ShimmerDirection.ltr,
+                                  period: const Duration(milliseconds: 2000),
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: CircleAvatar(
+                                    radius: 20,
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: 10,
+                          ),
+                        );
+                      }
+                    case ErrorCategoryState():
+                      {
+                        return const Text(
+                          "Some thing wnt wrong",
+                        );
+                      }
+                    case SuccessCategoryState():
+                      {
+                        var categoryDataList = state.categoryDataList;
 
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 1.1
-                  ),
-                  itemBuilder: (context, index) {
-                    return CategoryWidget(
-                        categoryData: categoryDataList[index]);
-                  },
-                  itemCount: categoryDataList.length,
-                ),
+                        return SizedBox(
+                          height: 250,
+                          width: mediaQuery.width,
+                          child: GridView.builder(
+                            scrollDirection: Axis.horizontal,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 20,
+                                    childAspectRatio: 1.1),
+                            itemBuilder: (context, index) {
+                              return CategoryWidget(
+                                  categoryData: categoryDataList[index]);
+                            },
+                            itemCount: categoryDataList.length,
+                          ),
+                        );
+                      }
+                  }
+                },
               ),
-
               Text(
                 'Home Appliance',
                 style: theme.textTheme.titleMedium,
                 textAlign: TextAlign.start,
               ).setVerticalPadding(context, 0.025),
-
-
               SizedBox(
                 height: 180,
                 child: ListView.builder(
@@ -126,42 +182,6 @@ class HomeView extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                 ),
               ),
-
-              // using grid view
-              // SizedBox(
-              //   height: 180,
-              //   width: 150,
-              //   child: GridView.builder(gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              //     crossAxisCount: 1,
-              //     crossAxisSpacing: 5,
-              //     mainAxisSpacing: 5
-              //   ),itemBuilder: (context, index){
-              //     return HomeAppliance();
-              //   }, itemCount: 3,
-              //   scrollDirection: Axis.horizontal,),
-              // ),
-
-              // SingleChildScrollView with row
-              //  const SingleChildScrollView(
-              //    scrollDirection: Axis.horizontal,
-              //    child: Row(
-              //      children: [
-              //        HomeAppliance(),
-              //        SizedBox(
-              //          width: 3,
-              //        ),
-              //        HomeAppliance(),
-              //        SizedBox(
-              //          width: 3,
-              //        ),
-              //        HomeAppliance(),
-              //        SizedBox(
-              //          width: 3,
-              //        ),
-              //        HomeAppliance(),
-              // ],
-              //    ),
-              //  ),
             ],
           ),
         ),

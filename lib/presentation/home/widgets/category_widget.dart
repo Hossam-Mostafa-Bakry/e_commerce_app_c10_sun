@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../domain/entities/category_data.dart';
+
 
 class CategoryWidget extends StatefulWidget {
   CategoryData categoryData;
@@ -17,7 +19,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
     return Column(
       children: [
         CircleAvatar(
-          backgroundImage: AssetImage(widget.categoryData.imagePath),
+          backgroundImage: NetworkImage(widget.categoryData.imageURL),
           radius: 40,
         ),
         Expanded(
@@ -39,10 +41,3 @@ class _CategoryWidgetState extends State<CategoryWidget> {
   }
 }
 
-class CategoryData {
-  String title;
-
-  String imagePath;
-
-  CategoryData({required this.title, required this.imagePath});
-}

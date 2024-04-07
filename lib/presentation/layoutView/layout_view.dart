@@ -1,4 +1,5 @@
 import 'package:e_commerce_app_c10_sun/core/extenions/padding_ext.dart';
+import 'package:e_commerce_app_c10_sun/presentation/category/pages/category_view.dart';
 import 'package:flutter/material.dart';
 
 import '../account/pages/account.dart';
@@ -18,7 +19,7 @@ class _LayoutViewState extends State<LayoutView> {
 
   List<Widget> screens = [
     HomeView(),
-    const Category(),
+    const CategoryView(),
     const WishList(),
     const Account()
   ];
